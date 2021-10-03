@@ -15,7 +15,7 @@ repositories {
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
-
+val exposedVersion: String by project
 dependencies {
     implementation(compose.desktop.currentOs)
 }

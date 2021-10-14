@@ -18,6 +18,8 @@ repositories {
 val exposedVersion: String by project
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation("org.xerial:sqlite-jdbc:3.32.3.2")
+    implementation("com.github.gwenn:sqlite-dialect:0.1.0")
 }
 
 tasks.withType<KotlinCompile>() {

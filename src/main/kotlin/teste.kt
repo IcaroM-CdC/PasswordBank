@@ -9,16 +9,16 @@ import persistance.DatabaseConnection
 
 fun main(){
 
-    val icaro = User("pedro", "icaro")
+    val icaro = User("icaro", "icaro")
 
-
-
-    val database = DatabaseConnection("jdbc:sqlite:sample.db", "org.sqlite.JDBC")
+    val database = DatabaseConnection("jdbc:sqlite:src/sample.db", "org.sqlite.JDBC")
     val DBqueries = Queries()
 
     val connection = database.startConnection()
 
     DBqueries.init(connection)
-//    DBqueries.newUser(icaro, connection)
-    DBqueries.verifyUser(icaro, connection)
+    DBqueries.newUser(icaro, connection)
+//    DBqueries.verifyUser(icaro, connection)
+//    DBqueries.listPasswords(icaro, connection)
+
 }

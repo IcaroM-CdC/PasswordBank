@@ -7,6 +7,9 @@ import java.sql.SQLException
 
 import model.User
 
+import persistance.PasswordList
+import java.util.*
+
 /* URL: "jdbc:sqlite:sample.db" */
 /* ClassName "org.sqlite.JDBC" */
 
@@ -114,12 +117,41 @@ class Queries {
         }
     }
 
-    public fun newPassword(password: Password, userID: Int, connection: Connection){
+    public fun newPassword(password: Password, userID: Int, connection: Connection) {
 
     }
 
-    public fun listPasswords(user: User){
+    public fun listPasswords(user: User, connection: Connection): PasswordList {
+        try {
+            val leftJoinPasswordSQL = """
+                SELECT password.id, password.ownerID, password.password, password.description 
+                FROM password LEFT JOIN user 
+                ON password.ownerID = user.id 
+                WHERE username = ?
+            """.trimIndent()
 
+            val leftJoinPasswordQuery = connection.prepareStatement(leftJoinPasswordSQL)
+            leftJoinPasswordQuery.setString(1, user.getUsername())
+            val result = leftJoinPasswordQuery.executeQuery()
+
+            val data = PasswordList()
+
+            while (result.next()){
+                var password = result.getString("password")
+                var description = result.getString("description")
+
+                data.passwordList.add(password)
+                data.descriptionList.add(description)
+            }
+            return data
+
+        } catch (erro: SQLException){
+            val emptyData = PasswordList()
+            return emptyData
+        }
     }
 
+    public fun deletePassword() {
+        
+    }
 }

@@ -1,17 +1,19 @@
 package persistance
 
+import model.Password
 import java.sql.DriverManager
 import java.sql.Connection
-import java.sql.ConnectionBuilder
+import java.sql.SQLException
+
+import model.User
 
 /* URL: "jdbc:sqlite:sample.db" */
 /* ClassName "org.sqlite.JDBC" */
 
-abstract class DatabaseConnection {
+class DatabaseConnection {
 
-    abstract var URL: String
-    abstract var className: String
-    abstract var connection: Connection
+    private var URL: String
+    private var className: String
 
     constructor(URL: String, className: String){
         this.URL = URL
@@ -21,27 +23,30 @@ abstract class DatabaseConnection {
     public fun startConnection(): Connection {
         try {
             Class.forName(className)
-            connection = DriverManager.getConnection(URL)
+            var connection: Connection = DriverManager.getConnection(URL)
+            return connection
 
         } catch (error: Exception) {
             error.printStackTrace()
             println("connection refused")
+
+            var emptyConnection: Connection =  DriverManager.getConnection("")
+            return emptyConnection
         }
-        return connection
     }
 }
 
-abstract class DatabaseQueries {
+class Queries {
 
-    val initUserTable = """
+    val initUserTableSQL = """
         CREATE TABLE IF NOT EXISTS user (
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-            username TEXT NOT NULL,
+            username TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL
         );
     """.trimIndent()
 
-    val initPasswordTable = """
+    val initPasswordTableSQL = """
         CREATE TABLE IF NOT EXISTS password (
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
             ownerID INTEGER NOT NULL,
@@ -51,17 +56,70 @@ abstract class DatabaseQueries {
         );
     """.trimIndent()
 
-    constructor(connection: Connection){
-        val initUserTableQuery = connection.prepareStatement(initUserTable)
-        val initPasswordTableQuery = connection.prepareStatement(initPasswordTable)
 
-        initPasswordTableQuery.execute()
+    public fun init(connection: Connection){
+
+        val initUserTableQuery = connection.prepareStatement(initUserTableSQL)
+        val initPasswordTableQuery = connection.prepareStatement(initPasswordTableSQL)
+
+        initUserTableQuery.execute()
         initPasswordTableQuery.execute()
     }
 
-    public fun fetchPasswordByUser(){
+    public fun newUser(user: User, connection: Connection): Boolean {
+
+        try {
+            val newUserSQL = """
+                 INSERT INTO user (username, password) VALUES (?,?);
+            """.trimIndent()
+
+            val newUserQuery = connection.prepareStatement(newUserSQL)
+
+            newUserQuery.setString(1, user.getUsername())
+            newUserQuery.setString(2, user.getPassword())
+            newUserQuery.execute()
+
+            return true
+
+        } catch (error: SQLException){
+            return false
+        }
+    }
+
+    public fun verifyUser(user: User, connection: Connection): Boolean{
+
+        try {
+            val requestedUserSQL = """
+                SELECT * FROM user WHERE username = ?
+            """.trimIndent()
+
+            val requestedUserQuery = connection.prepareStatement(requestedUserSQL)
+
+            requestedUserQuery.setString(1, user.getUsername())
+
+            val result = requestedUserQuery.executeQuery()
+
+            val nameResult = result.getString("username")
+            val passwordResult = result.getString("password")
+
+            if (user.getUsername() == nameResult && user.getPassword() == passwordResult){
+                return true
+            }
+            else {
+                return false
+            }
+
+        } catch (error: SQLException){
+            return false
+        }
+    }
+
+    public fun newPassword(password: Password, userID: Int, connection: Connection){
 
     }
 
+    public fun listPasswords(user: User){
+
+    }
 
 }

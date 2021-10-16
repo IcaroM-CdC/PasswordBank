@@ -32,10 +32,10 @@ import androidx.compose.ui.unit.dp
 import kotlin.system.exitProcess
 
 
-class PasswordScreen {
+class MainScreen {
 
     @Composable
-    public fun passwordScreen(){
+    public fun mainScreen(){
         Column() {
 
             topBar()
@@ -85,8 +85,8 @@ class PasswordScreen {
                         shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
                         backgroundColor = Color.White
                     ) {
-                        val image: Painter = painterResource("drawable/keylock.png")
-                        Image(painter = image,contentDescription = "", modifier = Modifier.scale(0.5.toFloat()).alpha(0.5.toFloat()))
+//                        val image: Painter = painterResource("drawable/keylock.png")
+//                        Image(painter = image,contentDescription = "", modifier = Modifier.scale(0.5.toFloat()).alpha(0.5.toFloat()))
                     }
                 }
 

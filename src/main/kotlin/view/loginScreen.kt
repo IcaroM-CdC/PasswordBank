@@ -1,7 +1,6 @@
 package view
 
 import controller.LoginController
-import view.PasswordScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -15,10 +14,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Button
-import androidx.compose.material.Divider
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 
 import androidx.compose.material.icons.Icons
@@ -36,17 +32,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
-
-
-import view.BackgroundGray
-import view.CustomBlue
-import kotlin.system.exitProcess
 
 class LoginScreen {
+
     @Composable
-    public fun loginPage(){
+    public fun render(){
         Column() {
 
             topBar()
@@ -117,6 +107,7 @@ class LoginScreen {
 
                     val username = remember { mutableStateOf(TextFieldValue()) }
                     val password = remember { mutableStateOf(TextFieldValue()) }
+                    val btnClick = remember { mutableStateOf(false) }
 
                     val emptyUsername = remember { mutableStateOf(false) }
                     val emptyPassword = remember { mutableStateOf(false) }
@@ -202,7 +193,7 @@ class LoginScreen {
                                 emptyPassword.value = true
                             }
                             else {
-                                loginCTRL.handleLogin(username.value.text, password.value.text)
+//                                loginCTRL.handleLogin(username.value.text, password.value.text)
                             }
                         },
                         shape = RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp, bottomStart = 2.dp, bottomEnd = 2.dp),

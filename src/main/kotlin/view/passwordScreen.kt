@@ -4,13 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.ButtonDefaults
 
 import androidx.compose.material.Card
-import androidx.compose.material.TextField
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.TopAppBar
@@ -29,16 +26,9 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
 
 
-import view.BackgroundGray
-import view.CustomBlue
 import kotlin.system.exitProcess
 
 
@@ -57,15 +47,34 @@ class PasswordScreen {
                     val boxWithConstraintsScope = this
 
                     val parentMaxWidthStr: String = boxWithConstraintsScope.maxWidth.toString()
-                    val aux: List<String> = parentMaxWidthStr.split(".")
-                    val parentMaxWidth: Double = aux[0].toDouble() * 0.60
+                    val parentMaxHeightStr: String = boxWithConstraintsScope.maxHeight.toString()
+                    
+                    val aux1: List<String> = parentMaxWidthStr.split(".")
+                    val aux2: List<String> = parentMaxHeightStr.split(".")
+                    
+                    val parentMaxWidth: Double = aux1[0].toDouble() * 0.60
+                    val parentMaxHeight: Double = aux2[0].toDouble()
 
                     Card(
-                        modifier = Modifier.width(parentMaxWidth.dp).fillMaxHeight(),
+                        modifier = Modifier.width(parentMaxWidth.dp).height(parentMaxHeight.dp),
                         shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
                         backgroundColor = BackgroundGray
                     ) {
-//                    LoginField()
+
+                        val dinamicWidth = parentMaxWidth * 0.90
+                        val dinamicHeight = parentMaxHeight * 0.10
+
+                        /* Column that wrap passwords*/
+                        Column(
+                            modifier = Modifier.fillMaxWidth().fillMaxHeight().padding((dinamicHeight * 0.30).dp),
+                            verticalArrangement = Arrangement.Top,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+                        }
                     }
                 }
 
@@ -146,6 +155,19 @@ class PasswordScreen {
                 DropdownMenuItem(onClick = { exitProcess(-1) }) {
                     Text("Exit")
                 }
+            }
+        }
+    }
+
+    @Composable
+    private fun passwordListElement(dinamicWidth: Double, dinamicHeight: Double){
+        BoxWithConstraints {
+            Card (
+                modifier = Modifier.width(dinamicWidth.dp).height(dinamicHeight.dp).padding(5.dp),
+                shape = RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp, bottomStart = 2.dp, bottomEnd = 2.dp),
+                backgroundColor = CustomBlue
+            ){
+
             }
         }
     }

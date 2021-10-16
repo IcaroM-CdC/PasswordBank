@@ -17,8 +17,12 @@ fun main(){
     val connection = database.startConnection()
 
     DBqueries.init(connection)
-    DBqueries.newUser(icaro, connection)
+//    DBqueries.newUser(icaro, connection)
 //    DBqueries.verifyUser(icaro, connection)
-//    DBqueries.listPasswords(icaro, connection)
+
+    val data: MutableList<Password>
+    data = DBqueries.listPasswords(icaro, connection)
+
+    println(data.size)
 
 }

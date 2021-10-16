@@ -1,13 +1,13 @@
 package persistance
 
-import model.Password
 import java.sql.DriverManager
 import java.sql.Connection
 import java.sql.SQLException
 
 import model.User
+import model.Password
 
-import persistance.PasswordList
+//import persistance.PasswordList
 import java.util.*
 
 /* URL: "jdbc:sqlite:sample.db" */
@@ -58,8 +58,7 @@ class Queries {
             FOREIGN KEY(ownerID) REFERENCES user(id)
         );
     """.trimIndent()
-
-
+    
     public fun init(connection: Connection){
 
         val initUserTableQuery = connection.prepareStatement(initUserTableSQL)
@@ -73,7 +72,8 @@ class Queries {
 
         try {
             val newUserSQL = """
-                 INSERT INTO user (username, password) VALUES (?,?);
+                 INSERT INTO user (username, password) 
+                 VALUES (?,?);
             """.trimIndent()
 
             val newUserQuery = connection.prepareStatement(newUserSQL)
@@ -93,7 +93,8 @@ class Queries {
 
         try {
             val requestedUserSQL = """
-                SELECT * FROM user WHERE username = ?
+                SELECT * FROM user 
+                WHERE username = ?
             """.trimIndent()
 
             val requestedUserQuery = connection.prepareStatement(requestedUserSQL)
@@ -121,7 +122,7 @@ class Queries {
 
     }
 
-    public fun listPasswords(user: User, connection: Connection): PasswordList {
+    public fun listPasswords(user: User, connection: Connection): MutableList<Password> {
         try {
             val leftJoinPasswordSQL = """
                 SELECT password.id, password.ownerID, password.password, password.description 
@@ -134,24 +135,42 @@ class Queries {
             leftJoinPasswordQuery.setString(1, user.getUsername())
             val result = leftJoinPasswordQuery.executeQuery()
 
-            val data = PasswordList()
+            val data: MutableList<Password> = mutableListOf<Password>()
+
+            /*
+                while the result of query contain a password, the loop run filling
+                the list os passwords, and finnaly return the data which contains
+                all fetched passwords.
+            */
 
             while (result.next()){
                 var password = result.getString("password")
                 var description = result.getString("description")
+                var newPassword: Password = Password(password, description)
 
-                data.passwordList.add(password)
-                data.descriptionList.add(description)
+                data.add(newPassword)
             }
             return data
 
-        } catch (erro: SQLException){
-            val emptyData = PasswordList()
+        } catch (error: SQLException) {
+            val emptyData: MutableList<Password> = mutableListOf<Password>()
             return emptyData
         }
     }
 
-    public fun deletePassword() {
-        
+    public fun deletePassword(passwordID: Int, connection: Connection) {
+        try {
+            val deletePasswordSQL = """
+                DELETE FROM password
+                WHERE password.id = ?
+            """.trimIndent()
+
+            val deletePasswordQuery = connection.prepareStatement(deletePasswordSQL)
+            deletePasswordQuery.setInt(1, passwordID)
+            deletePasswordQuery.executeQuery()
+            
+        } catch (error: SQLException) {
+
+        }
     }
 }

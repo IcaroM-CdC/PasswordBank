@@ -4,15 +4,21 @@ import controller.LoginController
 import view.PasswordScreen
 import view.LoginScreen
 
+import model.Password
+
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 
 fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
 
-//        val p = PasswordScreen()
-//        p.passwordScreen()
-        val p = LoginScreen()
-        p.loginPage()
+//        var data: MutableList<Password> =
+
+
+
+        val p = PasswordScreen()
+        p.passwordScreen()
+//        val p = LoginScreen()
+//        p.loginPage()
     }
 }

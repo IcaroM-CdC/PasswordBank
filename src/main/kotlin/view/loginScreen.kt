@@ -1,7 +1,5 @@
 package view
 
-import controller.LoginController
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -79,7 +77,7 @@ class LoginScreen {
     @Composable
     private fun LoginField(){
 
-        val loginCTRL = LoginController()
+//        val loginCTRL = LoginController()
 
         BoxWithConstraints(){
             val boxWithConstraintsScope2 = this

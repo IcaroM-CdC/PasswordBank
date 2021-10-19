@@ -1,19 +1,16 @@
 package view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-
-import androidx.compose.material.ButtonDefaults
-
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Text
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.text.selection.SelectionContainer
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -27,6 +24,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.ScrollbarAdapter
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.runtime.saveable.rememberSaveable
 
 
 import kotlin.system.exitProcess
@@ -35,7 +40,7 @@ import kotlin.system.exitProcess
 class MainScreen {
 
     @Composable
-    public fun mainScreen(){
+    public fun render(){
         Column() {
 
             topBar()
@@ -61,19 +66,39 @@ class MainScreen {
                         backgroundColor = BackgroundGray
                     ) {
 
-                        val dinamicWidth = parentMaxWidth * 0.90
-                        val dinamicHeight = parentMaxHeight * 0.10
+//                        val dinamicWidth = parentMaxWidth * 0.90
+//                        val dinamicHeight = parentMaxHeight * 0.10
+
+                        val dinamicWidth = parentMaxWidth * 1
+                        val dinamicHeight = parentMaxHeight * 0.15
 
                         /* Column that wrap passwords*/
+
+                        val scrollState = rememberScrollState(0)
+
+
                         Column(
-                            modifier = Modifier.fillMaxWidth().fillMaxHeight().padding((dinamicHeight * 0.30).dp),
+                            modifier = Modifier.fillMaxWidth()
+                                               .fillMaxHeight()
+//                                               .padding((dinamicHeight * 0.35).dp)
+                                               .verticalScroll(scrollState),
                             verticalArrangement = Arrangement.Top,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+
                             passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
-                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
-                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
-                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+//                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+//                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+//                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+//                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+//                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+//                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+//                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+//                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+//                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+//                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+//                            passwordListElement(dinamicWidth = dinamicWidth, dinamicHeight = dinamicHeight)
+
                         }
                     }
                 }
@@ -85,8 +110,8 @@ class MainScreen {
                         shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
                         backgroundColor = Color.White
                     ) {
-//                        val image: Painter = painterResource("drawable/keylock.png")
-//                        Image(painter = image,contentDescription = "", modifier = Modifier.scale(0.5.toFloat()).alpha(0.5.toFloat()))
+                        val image: Painter = painterResource("drawable/keylock.png")
+                        Image(painter = image,contentDescription = "", modifier = Modifier.scale(0.5.toFloat()).alpha(0.5.toFloat()))
                     }
                 }
 
@@ -106,19 +131,19 @@ class MainScreen {
                 Button(
                     onClick = {},
                     shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Gray),
+                    colors = ButtonDefaults.buttonColors(CustomBlue),
                     modifier = Modifier.width(100.dp).height(58.dp)) {
-                    Icon(Icons.Default.Search, contentDescription = "Localized description")
-                    Text("New")
+                    Icon(Icons.Default.Search, contentDescription = "Localized description", tint = BackgroundGray)
+                    Text("New", color = BackgroundGray)
                 }
                 Spacer(Modifier.width(5.dp))
                 Button(
                     onClick = {},
                     shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Gray),
+                    colors = ButtonDefaults.buttonColors(CustomBlue),
                     modifier = Modifier.width(100.dp).height(58.dp)) {
-                    Icon(Icons.Default.Add, contentDescription = "Localized description")
-                    Text("New")
+                    Icon(Icons.Default.Add, contentDescription = "Localized description", tint = BackgroundGray)
+                    Text("New", color = BackgroundGray)
                 }
             }
         }
@@ -132,12 +157,12 @@ class MainScreen {
             Button(
                 onClick = { expanded = true },
                 shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
-                colors = ButtonDefaults.buttonColors(Color.Gray),
+                colors = ButtonDefaults.buttonColors(CustomBlue),
                 modifier = Modifier.width(100.dp).height(58.dp)
             )
             {
-                Icon(Icons.Default.Menu, contentDescription = "Localized description")
-                Text("File")
+                Icon(Icons.Default.Menu, contentDescription = "Localized description", tint = BackgroundGray)
+                Text("File", color = BackgroundGray)
             }
             DropdownMenu(
                 expanded = expanded,
@@ -162,12 +187,44 @@ class MainScreen {
     @Composable
     private fun passwordListElement(dinamicWidth: Double, dinamicHeight: Double){
         BoxWithConstraints {
-            Card (
-                modifier = Modifier.width(dinamicWidth.dp).height(dinamicHeight.dp).padding(5.dp),
-                shape = RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp, bottomStart = 2.dp, bottomEnd = 2.dp),
-                backgroundColor = CustomBlue
+
+            Column (
+                modifier = Modifier.width(dinamicWidth.dp).height(dinamicHeight.dp)
             ){
 
+                var password by rememberSaveable { mutableStateOf("passwordField") }
+                var description by rememberSaveable { mutableStateOf("descriptionField") }
+
+                /* password */
+                Card(
+                    modifier = Modifier.width(dinamicWidth.dp).height((dinamicHeight / 2).dp),
+                    backgroundColor = Color.Red,
+                    shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
+                ){
+
+                    SelectionContainer {
+                        Text(
+                            modifier = Modifier.wrapContentWidth(Alignment.Start).wrapContentHeight(Alignment.CenterVertically),
+                            text = password,
+                            fontSize = 1.5.em
+                        )
+                    }
+                }
+
+                /* description */
+                Card(
+                    modifier = Modifier.width(dinamicWidth.dp).height((dinamicHeight / 2).dp),
+                    backgroundColor = Color.Yellow,
+                    shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
+                ){
+                    SelectionContainer {
+                        Text(
+                            modifier = Modifier.wrapContentWidth(Alignment.Start).wrapContentHeight(Alignment.CenterVertically),
+                            text = description,
+                            fontSize = 1.em,
+                        )
+                    }
+                }
             }
         }
     }

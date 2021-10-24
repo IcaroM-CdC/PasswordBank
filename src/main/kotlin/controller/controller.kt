@@ -11,6 +11,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.res.painterResource
 
 class MainController {
 
@@ -23,6 +24,7 @@ class MainController {
         Window(
             onCloseRequest = ::exitApplication,
             title = APPNAME,
+            icon = painterResource("drawable/icon.png"),
             state = WindowState(size = WindowSize(width = Dp(windowWidth), height = Dp(windowHeight)))
         ) {
 

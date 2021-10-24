@@ -69,7 +69,6 @@ class LoginScreen {
                         Image(painter = image,contentDescription = "", modifier = Modifier.scale(0.5.toFloat()).alpha(0.5.toFloat()))
                     }
                 }
-
             }
         }
     }

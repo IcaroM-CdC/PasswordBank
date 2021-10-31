@@ -53,10 +53,12 @@ class Queries {
 
     val initPasswordTableSQL = """
         CREATE TABLE IF NOT EXISTS password (
-            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-            ownerID INTEGER NOT NULL,
-            password TEXT NOT NULL,
-            description TEXT NOT NULL,
+            id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+            ownerID      INTEGER NOT NULL,
+            name         TEXT NOT NULL,
+            username     TEXT NOT NULL,
+            password     TEXT NOT NULL,
+            description  TEXT NOT NULL,
             FOREIGN KEY(ownerID) REFERENCES user(id)
         );
     """.trimIndent()
@@ -74,7 +76,7 @@ class Queries {
 
         try {
             val newUserSQL = """
-                 INSERT INTO user (username, password) 
+                 INSERT INTO user (username, password, name, username) 
                  VALUES (?,?);
             """.trimIndent()
 
@@ -82,6 +84,7 @@ class Queries {
 
             newUserQuery.setString(1, user.getUsername())
             newUserQuery.setString(2, user.getPassword())
+
             newUserQuery.execute()
 
             return true
@@ -127,7 +130,12 @@ class Queries {
     public fun listPasswords(user: User, connection: Connection): MutableList<Password> {
         try {
             val leftJoinPasswordSQL = """
-                SELECT password.id, password.ownerID, password.password, password.description 
+                SELECT password.id, 
+                       password.ownerID, 
+                       password.password, 
+                       password.description, 
+                       password.name, 
+                       password.username
                 FROM password LEFT JOIN user 
                 ON password.ownerID = user.id 
                 WHERE username = ?
@@ -146,9 +154,13 @@ class Queries {
             */
 
             while (result.next()){
+                var id = result.getInt("id")
                 var password = result.getString("password")
                 var description = result.getString("description")
-                var newPassword: Password = Password(password, description)
+                var username = result.getString("username")
+                var name = result.getString("name")
+
+                var newPassword: Password = Password(id, password, description, username, name)
 
                 data.add(newPassword)
             }

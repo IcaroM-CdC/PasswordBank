@@ -92,14 +92,12 @@ class LoginScreen {
                 modifier = Modifier.width(parentMaxWidth.dp).height(parentMaxHeight.dp).align(Alignment.Center),
                 shape = RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp, bottomStart = 2.dp, bottomEnd = 2.dp),
                 backgroundColor = CustomBlue
-            )
-            {
+            ) {
                 Column (
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
-                )
-                {
+                ) {
 
 
                     val username = remember { mutableStateOf(TextFieldValue()) }

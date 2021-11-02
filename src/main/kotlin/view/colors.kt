@@ -13,3 +13,13 @@ val SideMenuGreen = Color(21, 50, 67)
 val PasswordCardBlue = Color(40,75,99)
 val teste = Color(0, 145, 173)
 val orange = Color(239, 131, 84)
+
+
+val lightGreen = Color(42, 157, 143)
+val medianGreen = Color(40, 114, 113)
+val darkGreen = Color(38, 70, 83)
+
+
+val aaaa = Color(202, 210, 216)
+val azuldoido = Color(54, 87, 109)
+val seinao = Color(62, 167, 154)

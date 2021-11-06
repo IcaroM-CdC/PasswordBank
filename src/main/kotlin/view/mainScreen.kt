@@ -43,7 +43,7 @@ import model.Password
 
 /* Elements imports */
 
-import view.mainScreen.sideMenu
+import view.mainScreen.SideMenu
 
 /* Assets imports */
 
@@ -56,24 +56,30 @@ import compose.icons.fontawesomeicons.regular.EyeSlash
 
 class MainScreen {
 
-    var passwords: MutableList<Password> = mutableListOf()
-    var currentPasswordID: MutableState<Int> = mutableStateOf(0)
+    private var passwords: MutableList<Password> = mutableListOf()
 
-    lateinit var controlFlag: MutableState<Boolean>
+    private var currentPasswordID: MutableState<Int> = mutableStateOf(0)
+    private var controlFlag: MutableState<Boolean> = mutableStateOf(false)
+
+
 
     constructor(passwords: MutableList<Password>){
         this.passwords = passwords
     }
 
     fun handlePasswordClick(id: Int) {
+
         this.controlFlag.value = true
         this.currentPasswordID.value = id
     }
 
+
     @Composable
     public fun render() {
 
-        this.controlFlag = remember { mutableStateOf(false) }
+        println(controlFlag.value)
+
+//        val abacate = remember { mutableStateOf(false) }
 
         Row (){
 
@@ -91,7 +97,8 @@ class MainScreen {
                     val parentMaxWidth: Double = aux1[0].toDouble() * 0.17
                     val parentMaxHeight: Double = aux2[0].toDouble()
 
-                    sideMenu(width = parentMaxWidth, height = parentMaxHeight)
+                    val sideMenu = SideMenu()
+                    sideMenu.renderMenu(width = parentMaxWidth, height = parentMaxHeight)
 
                 }
 
@@ -169,7 +176,7 @@ class MainScreen {
                                 backgroundColor = BackgroundGray
                             ) {
 
-                                // this conditional statement controls the state of the right pannel, switching from the placeholder image to the password informations
+                                // This conditional statement controls the state of the right pannel, switching from the placeholder image to the password informations
 
                                 if (controlFlag.value == false){
                                     val image: Painter = painterResource("drawable/keylock.png")
@@ -307,14 +314,15 @@ class MainScreen {
 
                 val image: Painter = painterResource("drawable/passwordIcon.png")
 
-                Spacer(modifier = Modifier.height(80.dp))
+//                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height((parentMaxHeight * 0.10).dp))
                 Image(
                     painter = image,
                     contentDescription = "",
                     modifier = Modifier.scale(1.toFloat()).alpha(1.toFloat()).width(textFieldWidth.dp),
                     alignment = Alignment.Center
                 )
-                Spacer(modifier = Modifier.height(45.dp))
+                Spacer(modifier = Modifier.height((parentMaxHeight * 0.08).dp))
                 Text(
                     modifier = Modifier.width(textFieldWidth.dp).background(color = Color.Transparent),
                     text = passwords[currentPasswordID.value - 1].getName(),
@@ -324,7 +332,7 @@ class MainScreen {
                         fontSize = 50.sp,
                     ),
                 )
-                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height((parentMaxHeight * 0.06).dp))
 
                 /* PASSWORD AND USERNAME FIELDS */
 
@@ -365,22 +373,25 @@ class MainScreen {
                     )
                 )
 
+
                 Row(){
 
                     var passwordElementWidth = textFieldWidth * 0.87
                     var passwordElementButtonWidth = textFieldWidth * 0.13
 
-                    Column {
+                    Column (
+                        modifier = Modifier.height((textFieldHeight + (textFieldHeight * 0.36)).dp)
+                    ){
                         Card(
                             shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 0.dp),
                             elevation = 0.dp
                         ){
                             Text(
                                 modifier = Modifier.width(passwordElementWidth.dp)
-                                    .height((textFieldHeight * 0.45).dp)
-                                    .background(color = aaaa)
-                                    .padding(start = (passwordElementWidth * 0.02).dp)
-                                    .wrapContentHeight(Alignment.Bottom),
+                                                   .height((textFieldHeight * 0.45).dp)
+                                                   .background(color = aaaa)
+                                                   .padding(start = (passwordElementWidth * 0.02).dp)
+                                                   .wrapContentHeight(Alignment.Bottom),
                                 text = "Password",
                                 style = TextStyle(
                                     fontSize = 17.sp,
@@ -413,7 +424,7 @@ class MainScreen {
                     }
 
                     Card (
-                        modifier = Modifier.width(passwordElementButtonWidth.dp).height((textFieldHeight * 1.35).dp),
+                        modifier = Modifier.width(passwordElementButtonWidth.dp).height(((textFieldHeight * 0.45) + (textFieldHeight * 0.90)).dp),
                         elevation = 0.dp,
                         backgroundColor = SideMenuGreen,
                         shape = RoundedCornerShape(0.dp, 0.dp, 5.dp, 0.dp),
@@ -424,7 +435,7 @@ class MainScreen {
 //                            TODO("deixar o tamanho do icone dinâmico")
 
                             Icon(
-                                modifier = Modifier.size(40.dp),
+                                modifier = Modifier.size((textFieldHeight * 0.50).dp),
                                 imageVector = if (passwordVisibility.value == true) FontAwesomeIcons.Regular.Eye else FontAwesomeIcons.Regular.EyeSlash,
                                 contentDescription = "visibility",
                                 tint = Color.White
@@ -468,5 +479,6 @@ class MainScreen {
             }
         }
     }
+
 
 }

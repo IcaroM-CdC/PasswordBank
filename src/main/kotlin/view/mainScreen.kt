@@ -1,12 +1,12 @@
 package view
 
+/* Jetpack compose imports */
+
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-
 import androidx.compose.runtime.*
-
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-
 import androidx.compose.material.*
 import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
@@ -35,8 +34,25 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import compose.icons.FontAwesomeIcons
+import compose.icons.fontawesomeicons.Regular
+
+/* Model imports */
 
 import model.Password
+
+/* Elements imports */
+
+import view.mainScreen.sideMenu
+
+/* Assets imports */
+
+import compose.icons.fontawesomeicons.regular.Eye
+import compose.icons.fontawesomeicons.regular.EyeSlash
+
+
+
+
 
 class MainScreen {
 
@@ -75,13 +91,8 @@ class MainScreen {
                     val parentMaxWidth: Double = aux1[0].toDouble() * 0.17
                     val parentMaxHeight: Double = aux2[0].toDouble()
 
-                    Card(
-                        modifier = Modifier.width(parentMaxWidth.dp).height(parentMaxHeight.dp),
-                        shape = RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
-                        backgroundColor = SideMenuGreen
-                    ) {
-                        
-                    }
+                    sideMenu(width = parentMaxWidth, height = parentMaxHeight)
+
                 }
 
                 Column {
@@ -410,8 +421,11 @@ class MainScreen {
                     ) {
                         IconButton( onClick = { passwordVisibility.value = !passwordVisibility.value}) {
 
+//                            TODO("deixar o tamanho do icone dinâmico")
+
                             Icon(
-                                imageVector = if (passwordVisibility.value == true) Icons.Filled.Lock else Icons.Default.Add,
+                                modifier = Modifier.size(40.dp),
+                                imageVector = if (passwordVisibility.value == true) FontAwesomeIcons.Regular.Eye else FontAwesomeIcons.Regular.EyeSlash,
                                 contentDescription = "visibility",
                                 tint = Color.White
                             )

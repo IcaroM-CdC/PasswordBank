@@ -8,7 +8,7 @@ class Password {
     private val password: String
     private val description: String
 
-    constructor(id: Int, password: String, description: String, username: String, name: String){
+    constructor(id: Int = 0, password: String, description: String, username: String, name: String){
 
         this.id = id
         this.username = username

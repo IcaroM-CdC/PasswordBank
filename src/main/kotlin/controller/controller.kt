@@ -1,11 +1,12 @@
 package controller
 
-import view.LoginScreen
+import androidx.compose.material.Button
 import view.MainScreen
-import view.mainScreen.AboutPopUp
 
 import java.awt.Toolkit
 import java.awt.Dimension
+import org.w3c.dom.events.*
+
 import java.sql.Connection
 
 import androidx.compose.ui.window.application
@@ -15,12 +16,18 @@ import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.Composable
-
 import model.Password
+
 import model.User
 
 import persistance.DatabaseConnection
 import persistance.Queries
+
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
+
+
+
 
 class MainController {
 
@@ -55,7 +62,15 @@ class MainController {
         var user = User("Icaro", "123456789")
         var data = queries.listPasswords(user, connection)
 
-        MainScreen(data).render()
+        val mainScreen = MainScreen(data)
+        mainScreen.render()
+        ActionListener {
 
+        }
     }
+}
+
+fun addPassword(newPassword: Password){
+
+
 }

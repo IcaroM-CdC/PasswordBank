@@ -1,11 +1,7 @@
 package controller
 
-import androidx.compose.material.Button
-import view.MainScreen
-
 import java.awt.Toolkit
 import java.awt.Dimension
-import org.w3c.dom.events.*
 
 import java.sql.Connection
 
@@ -16,18 +12,14 @@ import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.Composable
-import model.Password
 
+import model.Password
 import model.User
+
+import view.MainScreen
 
 import persistance.DatabaseConnection
 import persistance.Queries
-
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
-
-
-
 
 class MainController {
 
@@ -64,13 +56,14 @@ class MainController {
 
         val mainScreen = MainScreen(data)
         mainScreen.render()
-        ActionListener {
 
+        if (mainScreen.getCreateNewPasswordClickState() == true){
+
+            val password: Password = mainScreen.getNewPassword()
+
+            queries.newPassword(password, 1, connection)
+
+            mainScreen.setCreateNewPasswordClickState(false)
         }
     }
-}
-
-fun addPassword(newPassword: Password){
-
-
 }

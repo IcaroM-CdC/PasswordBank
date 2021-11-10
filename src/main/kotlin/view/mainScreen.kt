@@ -36,30 +36,63 @@ import compose.icons.fontawesomeicons.regular.Eye
 import compose.icons.fontawesomeicons.regular.EyeSlash
 import compose.icons.fontawesomeicons.regular.QuestionCircle
 
+/* Misc imports */
 
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
+import misc.textSizeCalc
 
 
 public class MainScreen {
 
+    private lateinit var createNewPasswordClick: MutableState<Boolean>
+
+    private lateinit var name: MutableState<String>
+    private lateinit var username: MutableState<String>
+    private lateinit var password: MutableState<String>
+    private lateinit var description: MutableState<String>
+
+
     private var passwords: MutableList<Password> = mutableListOf()
+    private val currentPasswordID: MutableState<Int> = mutableStateOf(0)
+    private val controlFlag: MutableState<Boolean> = mutableStateOf(false)
+    private val showTopBarActionButton: MutableState<Boolean> = mutableStateOf(false)
 
-    private var currentPasswordID: MutableState<Int> = mutableStateOf(0)
-    private var controlFlag: MutableState<Boolean> = mutableStateOf(false)
-    private var showTopBarActionButton: MutableState<Boolean> = mutableStateOf(false)
-
-
-    private val newPasswordElement: NewPasswordElement = NewPasswordElement()
-
+    private val passwordDetailsElement: PasswordDetailsElement = PasswordDetailsElement()
 
 
     constructor(passwords: MutableList<Password>){
         this.passwords = passwords
     }
 
-    private fun handlePasswordClick(id: Int) {
 
+    public fun getNewPassword(): Password {
+
+        val newPassword: Password = Password(
+            name = this.name.value,
+            username = this.username.value,
+            password = this.password.value,
+            description = this.description.value
+        )
+
+        return newPassword
+    }
+
+
+    public fun getCreateNewPasswordClickState(): Boolean {
+        return this.createNewPasswordClick.value
+    }
+
+
+    public fun setCreateNewPasswordClickState(value: Boolean) {
+        this.createNewPasswordClick.value = value
+
+        name.value = ""
+        username.value = ""
+        password.value = ""
+        description.value = ""
+    }
+
+
+    private fun handleSelectPasswordOnList(id: Int) {
         this.controlFlag.value = true
         this.currentPasswordID.value = id
     }
@@ -67,6 +100,14 @@ public class MainScreen {
 
     @Composable
     public fun render() {
+
+        name = remember { mutableStateOf("") }
+        username = remember { mutableStateOf("") }
+        password = remember { mutableStateOf("") }
+        description = remember { mutableStateOf("") }
+
+
+        createNewPasswordClick = remember { mutableStateOf(false) }
 
         Row (){
 
@@ -173,7 +214,7 @@ public class MainScreen {
 //                                }
 
 
-                                newPasswordElement.render(parentMaxWidth, parentMaxHeight)
+                                newPasswordElement(parentMaxWidth, parentMaxHeight)
                             }
                         }
                     }
@@ -187,7 +228,7 @@ public class MainScreen {
             TopAppBar(backgroundColor = Color.White, modifier = Modifier.height(58.dp)) {
                 Row {
                     val a = Button(
-                        onClick = {newPasswordElement.teste.value = true},
+                        onClick = {createNewPasswordClick.value = true},
                         enabled = true,
                         content = {
                             Text(text = "Create")
@@ -197,7 +238,6 @@ public class MainScreen {
             }
         }
     }
-
 
     @Composable
     fun sideMenu(width: Double, height: Double){
@@ -235,7 +275,6 @@ public class MainScreen {
         }
     }
 
-
     @Composable
     private fun passwordList(
         dinamicWidth: Double,
@@ -266,7 +305,7 @@ public class MainScreen {
                             cardColor = SecondaryBlue
                             cardHighlight = true
 
-                            handlePasswordClick(id)
+                            handleSelectPasswordOnList(id)
                         }
                         else {
                             cardColor = BackgroundGray
@@ -322,256 +361,17 @@ public class MainScreen {
             }
         }
     }
-}
-
-
-
-
-
-class PasswordDetailsElement {
-
 
     @Composable
-    public fun render(
-        parentMaxWidth: Double,
-        parentMaxHeight: Double,
-        password: Password
-    ) {
-
-        val passwordVisibility = remember { mutableStateOf(false) }
-
-        var textFieldWidth = parentMaxWidth * 0.85
-        var textFieldHeight = parentMaxHeight * 0.07
-
-        Column(
-            modifier = Modifier.background(color = BackgroundGray),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row {
-
-            }
-
-            Column() {
-
-                val image: Painter = painterResource("drawable/passwordIcon.png")
-
-                Spacer(modifier = Modifier.height((parentMaxHeight * 0.10).dp))
-                Image(
-                    painter = image,
-                    contentDescription = "",
-                    modifier = Modifier.scale(1.toFloat()).alpha(1.toFloat()).width(textFieldWidth.dp),
-                    alignment = Alignment.Center
-                )
-                Spacer(modifier = Modifier.height((parentMaxHeight * 0.075).dp))
-
-                TextField(
-                    modifier = Modifier.width(textFieldWidth.dp).height((textFieldHeight * 1.5).dp),
-                    value = password.getName(),
-                    onValueChange = {},
-                    shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 0.dp),
-                    readOnly = true,
-                    singleLine = true,
-                    textStyle = TextStyle(
-                        color = Color.Black,
-                        fontSize = 50.sp,
-                        textAlign = TextAlign.Center
-                    ),
-                    colors = TextFieldDefaults.textFieldColors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedLabelColor = Color.Black,
-                        backgroundColor = Color.Transparent,
-                        unfocusedLabelColor = Color.Black
-                    )
-                )
-
-                Spacer(modifier = Modifier.height((parentMaxHeight * 0.055).dp))
-
-                /* PASSWORD AND USERNAME FIELDS */
-
-                Card(
-                    shape = RoundedCornerShape(5.dp, 5.dp, 0.dp, 0.dp),
-                    elevation = 0.dp
-                ){
-                    Text(
-                        modifier = Modifier.width(textFieldWidth.dp)
-                            .height((textFieldHeight * 0.45).dp)
-                            .background(color = aaaa)
-                            .padding(start = (textFieldWidth * 0.02).dp)
-                            .wrapContentHeight(Alignment.Bottom),
-                        text = "Username",
-                        style = TextStyle(
-                            fontSize = 17.sp,
-                        ),
-                    )
-                }
-
-                TextField(
-                    modifier = Modifier.width(textFieldWidth.dp).height(textFieldHeight.dp).wrapContentHeight(Alignment.Top),
-                    value = password.getUsername(),
-                    onValueChange = {},
-                    shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 0.dp),
-                    readOnly = true,
-                    singleLine = true,
-                    textStyle = TextStyle(
-                        color = Color.Black,
-                        fontSize = 25.sp
-                    ),
-                    colors = TextFieldDefaults.textFieldColors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedLabelColor = Color.Black,
-                        backgroundColor = aaaa,
-                        unfocusedLabelColor = Color.Black
-                    )
-                )
-
-
-                Row(){
-
-                    var passwordElementWidth = textFieldWidth * 0.87
-                    var passwordElementButtonWidth = textFieldWidth * 0.13
-
-                    Column (
-                        modifier = Modifier.height((textFieldHeight + (textFieldHeight * 0.36)).dp)
-                    ){
-                        Card(
-                            shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 0.dp),
-                            elevation = 0.dp
-                        ){
-                            Text(
-                                modifier = Modifier.width(passwordElementWidth.dp)
-                                    .height((textFieldHeight * 0.45).dp)
-                                    .background(color = aaaa)
-                                    .padding(start = (passwordElementWidth * 0.02).dp)
-                                    .wrapContentHeight(Alignment.Bottom),
-                                text = "Password",
-                                style = TextStyle(
-                                    fontSize = 17.sp,
-                                ),
-                            )
-                        }
-
-                        TextField(
-                            modifier = Modifier.width(passwordElementWidth.dp)
-                                .height(textFieldHeight.dp)
-                                .wrapContentHeight(Alignment.Top),
-                            value = password.getPassword(),
-                            visualTransformation = if(passwordVisibility.value == false) PasswordVisualTransformation('*') else VisualTransformation.None,
-                            onValueChange = {},
-                            shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 5.dp),
-                            readOnly = true,
-                            singleLine = true,
-                            textStyle = TextStyle(
-                                color = Color.Black,
-                                fontSize = 25.sp
-                            ),
-                            colors = TextFieldDefaults.textFieldColors(
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                focusedLabelColor = Color.Black,
-                                backgroundColor = aaaa,
-                                unfocusedLabelColor = Color.Black
-                            )
-                        )
-                    }
-
-                    Card (
-                        modifier = Modifier.width(passwordElementButtonWidth.dp).height(((textFieldHeight * 0.45) + (textFieldHeight * 0.90)).dp),
-                        elevation = 0.dp,
-                        backgroundColor = SideMenuGreen,
-                        shape = RoundedCornerShape(0.dp, 0.dp, 5.dp, 0.dp),
-
-                        ) {
-                        IconButton( onClick = { passwordVisibility.value = !passwordVisibility.value}) {
-
-//                            TODO("deixar o tamanho do icone dinâmico")
-
-                            Icon(
-                                modifier = Modifier.size((textFieldHeight * 0.50).dp),
-                                imageVector = if (passwordVisibility.value == true) FontAwesomeIcons.Regular.Eye else FontAwesomeIcons.Regular.EyeSlash,
-                                contentDescription = "visibility",
-                                tint = Color.White
-                            )
-                        }
-                    }
-                }
-
-
-                /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
-
-                Spacer(modifier = Modifier.height(50.dp))
-                TextField(
-                    modifier = Modifier.width(textFieldWidth.dp).height(textFieldHeight.dp),
-                    value = password.getDescription(),
-                    onValueChange = {},
-                    shape = RoundedCornerShape(0.dp, 0.dp, 5.dp, 5.dp),
-                    readOnly = true,
-                    singleLine = true,
-                    textStyle = TextStyle(
-                        color = Color.Black,
-                        fontSize = 20.sp
-                    ),
-                    colors = TextFieldDefaults.textFieldColors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedLabelColor = Color.Black,
-                        unfocusedLabelColor = Color.Black,
-                        backgroundColor = Color.Transparent
-                    ),
-                    label = {
-                        Text(
-                            text = "Description",
-                            style = TextStyle(
-                                color = azuldoido,
-                                fontSize = 16.sp,
-                            ),
-                        )
-                    }
-                )
-            }
-        }
-    }
-}
-
-class NewPasswordElement {
-
-
-    private val name        = mutableStateOf("")
-    private val username    = mutableStateOf("")
-    private val password    = mutableStateOf("")
-    private val description = mutableStateOf("")
-
-    private val emptyName        = mutableStateOf(false)
-    private val emptyUsername    = mutableStateOf(false)
-    private val emptyPassword    = mutableStateOf(false)
-    private val emptyDescription = mutableStateOf(false)
-
-    public var teste = mutableStateOf(false)
-
-    public fun getName(): String {
-        return (this.name).toString()
-    }
-
-    public fun getUsername(): String {
-        return (this.username).toString()
-    }
-
-    public fun getPassword(): String {
-        return (this.password).toString()
-    }
-
-    public fun getDescription(): String {
-        return (this.description).toString()
-    }
-
-
-    @Composable
-    public fun render(
+    public fun newPasswordElement(
         parentMaxWidth: Double,
         parentMaxHeight: Double
     ) {
+
+        val emptyName        = remember { mutableStateOf(false) }
+        val emptyUsername    = remember { mutableStateOf(false) }
+        val emptyPassword    = remember { mutableStateOf(false) }
+        val emptyDescription = remember { mutableStateOf(false) }
 
         val passwordVisibility = remember { mutableStateOf(false) }
 
@@ -799,4 +599,212 @@ class NewPasswordElement {
         }
     }
 
+}
+
+
+
+class PasswordDetailsElement {
+
+    @Composable
+    public fun render(
+        parentMaxWidth: Double,
+        parentMaxHeight: Double,
+        password: Password
+    ) {
+
+        val passwordVisibility = remember { mutableStateOf(false) }
+
+        var textFieldWidth = parentMaxWidth * 0.85
+        var textFieldHeight = parentMaxHeight * 0.07
+
+        Column(
+            modifier = Modifier.background(color = BackgroundGray),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row {
+
+            }
+
+            Column() {
+
+                val image: Painter = painterResource("drawable/passwordIcon.png")
+
+                Spacer(modifier = Modifier.height((parentMaxHeight * 0.10).dp))
+                Image(
+                    painter = image,
+                    contentDescription = "",
+                    modifier = Modifier.scale(1.toFloat()).alpha(1.toFloat()).width(textFieldWidth.dp),
+                    alignment = Alignment.Center
+                )
+                Spacer(modifier = Modifier.height((parentMaxHeight * 0.075).dp))
+
+                TextField(
+                    modifier = Modifier.width(textFieldWidth.dp).height((textFieldHeight * 1.5).dp),
+                    value = password.getName(),
+                    onValueChange = {},
+                    shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 0.dp),
+                    readOnly = true,
+                    singleLine = true,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontSize = 50.sp,
+                        textAlign = TextAlign.Center
+                    ),
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedLabelColor = Color.Black,
+                        backgroundColor = Color.Transparent,
+                        unfocusedLabelColor = Color.Black
+                    )
+                )
+
+                Spacer(modifier = Modifier.height((parentMaxHeight * 0.055).dp))
+
+                /* PASSWORD AND USERNAME FIELDS */
+
+                Card(
+                    shape = RoundedCornerShape(5.dp, 5.dp, 0.dp, 0.dp),
+                    elevation = 0.dp
+                ){
+                    Text(
+                        modifier = Modifier.width(textFieldWidth.dp)
+                            .height((textFieldHeight * 0.45).dp)
+                            .background(color = aaaa)
+                            .padding(start = (textFieldWidth * 0.02).dp)
+                            .wrapContentHeight(Alignment.Bottom),
+                        text = "Username",
+                        style = TextStyle(
+                            fontSize = 17.sp,
+                        ),
+                    )
+                }
+
+                TextField(
+                    modifier = Modifier.width(textFieldWidth.dp).height(textFieldHeight.dp).wrapContentHeight(Alignment.Top),
+                    value = password.getUsername(),
+                    onValueChange = {},
+                    shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 0.dp),
+                    readOnly = true,
+                    singleLine = true,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontSize = 25.sp
+                    ),
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedLabelColor = Color.Black,
+                        backgroundColor = aaaa,
+                        unfocusedLabelColor = Color.Black
+                    )
+                )
+
+
+                Row(){
+
+                    var passwordElementWidth = textFieldWidth * 0.87
+                    var passwordElementButtonWidth = textFieldWidth * 0.13
+
+                    Column (
+                        modifier = Modifier.height((textFieldHeight + (textFieldHeight * 0.36)).dp)
+                    ){
+                        Card(
+                            shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 0.dp),
+                            elevation = 0.dp
+                        ){
+                            Text(
+                                modifier = Modifier.width(passwordElementWidth.dp)
+                                    .height((textFieldHeight * 0.45).dp)
+                                    .background(color = aaaa)
+                                    .padding(start = (passwordElementWidth * 0.02).dp)
+                                    .wrapContentHeight(Alignment.Bottom),
+                                text = "Password",
+                                style = TextStyle(
+                                    fontSize = 17.sp,
+                                ),
+                            )
+                        }
+
+                        TextField(
+                            modifier = Modifier.width(passwordElementWidth.dp)
+                                .height(textFieldHeight.dp)
+                                .wrapContentHeight(Alignment.Top),
+                            value = password.getPassword(),
+                            visualTransformation = if(passwordVisibility.value == false) PasswordVisualTransformation('*') else VisualTransformation.None,
+                            onValueChange = {},
+                            shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 5.dp),
+                            readOnly = true,
+                            singleLine = true,
+                            textStyle = TextStyle(
+                                color = Color.Black,
+                                fontSize = 25.sp
+                            ),
+                            colors = TextFieldDefaults.textFieldColors(
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedLabelColor = Color.Black,
+                                backgroundColor = aaaa,
+                                unfocusedLabelColor = Color.Black
+                            )
+                        )
+                    }
+
+                    Card (
+                        modifier = Modifier.width(passwordElementButtonWidth.dp).height(((textFieldHeight * 0.45) + (textFieldHeight * 0.90)).dp),
+                        elevation = 0.dp,
+                        backgroundColor = SideMenuGreen,
+                        shape = RoundedCornerShape(0.dp, 0.dp, 5.dp, 0.dp),
+
+                        ) {
+                        IconButton( onClick = { passwordVisibility.value = !passwordVisibility.value}) {
+
+//                            TODO("deixar o tamanho do icone dinâmico")
+
+                            Icon(
+                                modifier = Modifier.size((textFieldHeight * 0.50).dp),
+                                imageVector = if (passwordVisibility.value == true) FontAwesomeIcons.Regular.Eye else FontAwesomeIcons.Regular.EyeSlash,
+                                contentDescription = "visibility",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                }
+
+
+                /* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+
+                Spacer(modifier = Modifier.height(50.dp))
+                TextField(
+                    modifier = Modifier.width(textFieldWidth.dp).height(textFieldHeight.dp),
+                    value = password.getDescription(),
+                    onValueChange = {},
+                    shape = RoundedCornerShape(0.dp, 0.dp, 5.dp, 5.dp),
+                    readOnly = true,
+                    singleLine = true,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontSize = 20.sp
+                    ),
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedLabelColor = Color.Black,
+                        unfocusedLabelColor = Color.Black,
+                        backgroundColor = Color.Transparent
+                    ),
+                    label = {
+                        Text(
+                            text = "Description",
+                            style = TextStyle(
+                                color = azuldoido,
+                                fontSize = 16.sp,
+                            ),
+                        )
+                    }
+                )
+            }
+        }
+    }
 }

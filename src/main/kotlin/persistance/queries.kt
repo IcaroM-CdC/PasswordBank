@@ -92,9 +92,30 @@ class Queries {
         }
     }
 
-//    public fun newPassword(password: Password, userID: Int, connection: Connection) {
-//
-//    }
+    public fun newPassword(password: Password, userID: Int, connection: Connection): Boolean {
+        try {
+            val newPasswordSQL = """
+                INSERT INTO password (ownerID, name, username, password, description)
+                VALUES (?,?,?,?,?);
+            """.trimIndent()
+
+            val newPasswordQuery = connection.prepareStatement(newPasswordSQL)
+
+            newPasswordQuery.setInt(1, userID)
+            newPasswordQuery.setString(2, password.getName())
+            newPasswordQuery.setString(3, password.getUsername())
+            newPasswordQuery.setString(4, password.getPassword())
+            newPasswordQuery.setString(5, password.getDescription())
+
+            newPasswordQuery.execute()
+
+            return true
+
+        } catch (error: SQLException){
+            println("deu ruim")
+            return false
+        }
+    }
 
     public fun listPasswords(user: User, connection: Connection): MutableList<Password> {
         try {

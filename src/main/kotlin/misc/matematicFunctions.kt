@@ -5,9 +5,9 @@ import androidx.compose.ui.unit.sp
 
 fun textSizeCalc(screenWidth: Double): TextUnit {
 
-    val baseScreenWidth = 1920
+    val baseScreenWidth = 1080
     val baseFontSize = 50
 
-    return ((baseScreenWidth * baseFontSize) / screenWidth).sp
+    return ((screenWidth * baseFontSize) / baseScreenWidth).sp
 
 }

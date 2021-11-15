@@ -1,5 +1,7 @@
 package controller
 
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.defaultMinSize
 import java.awt.Toolkit
 import java.awt.Dimension
 
@@ -12,6 +14,8 @@ import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 import model.Password
 import model.User
@@ -36,7 +40,8 @@ class MainController {
             onCloseRequest = ::exitApplication,
             title = APPNAME,
             icon = painterResource("drawable/icon.png"),
-            state = WindowState(size = WindowSize(width = Dp(windowWidth), height = Dp(windowHeight)))
+            state = WindowState(size = WindowSize(width = Dp(windowWidth), height = Dp(windowHeight))),
+
         ) {
 
             connection = DatabaseConnection(URL = DATABASE_URL, className = CLASSNAME).startConnection()
@@ -44,7 +49,11 @@ class MainController {
             queries = Queries()
             queries.init(connection)
 
+//            Modifier.defaultMinSize(minHeight = (windowHeight * 0.60).dp)
+
             renderMainScreen()
+
+
         }
     }
 

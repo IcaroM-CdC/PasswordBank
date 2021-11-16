@@ -52,7 +52,7 @@ public class MainScreen {
     private lateinit var description: MutableState<String>
 
 
-    private val screenSelector: MutableState<Int> = mutableStateOf(0)
+    private val screenSelector: MutableState<Int> = mutableStateOf(1)
 
     private var passwords: MutableList<Password> = mutableListOf()
     private val currentPasswordID: MutableState<Int> = mutableStateOf(0)
@@ -98,6 +98,7 @@ public class MainScreen {
     private fun handleSelectPasswordOnList(id: Int) {
         this.controlFlag.value = true
         this.currentPasswordID.value = id
+        this.screenSelector.value = 2
     }
 
     /* Composable Functions */
@@ -215,13 +216,26 @@ public class MainScreen {
 
                                     // This conditional statement controls the state of the right pannel, switching from the placeholder image to the password informations
 
-                                    if (controlFlag.value == false){
+
+                                    if (screenSelector.value == 1){
                                         val image: Painter = painterResource("drawable/keylock.png")
                                         Image(painter = image,contentDescription = "", modifier = Modifier.scale(0.5.toFloat()).alpha(0.5.toFloat()))
                                     }
-                                    else {
+                                    else if (screenSelector.value == 2){
                                         PasswordDetailsElement().render(parentMaxWidth, parentMaxHeight, passwords[currentPasswordID.value - 1])
                                     }
+                                    else if (screenSelector.value == 3){
+                                        newPasswordElement(parentMaxWidth, parentMaxHeight, mainScreenHeight)
+                                    }
+
+
+//                                    if (controlFlag.value == false){
+//                                        val image: Painter = painterResource("drawable/keylock.png")
+//                                        Image(painter = image,contentDescription = "", modifier = Modifier.scale(0.5.toFloat()).alpha(0.5.toFloat()))
+//                                    }
+//                                    else {
+//                                        PasswordDetailsElement().render(parentMaxWidth, parentMaxHeight, passwords[currentPasswordID.value - 1])
+//                                    }
 
 
 //                                    newPasswordElement(parentMaxWidth, parentMaxHeight, mainScreenHeight)
@@ -242,19 +256,19 @@ public class MainScreen {
 
             TopAppBar(backgroundColor = Color.White, modifier = Modifier.height(58.dp)) {
                 Row {
-//                    Button(
-//                        onClick = {setCreateNewPasswordClickState(true)},
-//                        enabled = true,
-//                        content = {
-//                            Text(text = "Create")
-//                        }
-//                    )
+                    Button(
+                        onClick = {setCreateNewPasswordClickState(true); this@MainScreen.screenSelector.value = 1},
+                        enabled = true,
+                        content = {
+                            Text(text = "Create")
+                        }
+                    )
                     Button(
                         modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.10).dp),
                         shape = RoundedCornerShape(0.dp),
                         elevation = ButtonDefaults.elevation(0.dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                        onClick = {},
+                        onClick = {this@MainScreen.screenSelector.value = 3},
                         content = {
                             Text(
                                     text = "New Password"

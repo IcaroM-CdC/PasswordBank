@@ -60,7 +60,7 @@ class MainController {
     @Composable
     private fun renderMainScreen(){
 
-        var user = User("Icaro", "123456789")
+        var user = User("icaro", "123")
         var data = queries.listPasswords(user, connection)
 
         val mainScreen = MainScreen(data)

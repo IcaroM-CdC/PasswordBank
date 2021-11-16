@@ -56,7 +56,6 @@ public class MainScreen {
     private val screenSelector: MutableState<Int> = mutableStateOf(1)
 
     private var passwords: MutableList<Password> = mutableListOf()
-//    private val currentPasswordID: MutableState<Int> = mutableStateOf(0)
     private lateinit var currentPasswordID: MutableState<Int>
     private val controlFlag: MutableState<Boolean> = mutableStateOf(false)
     private val showTopBarActionButton: MutableState<Boolean> = mutableStateOf(false)
@@ -65,14 +64,19 @@ public class MainScreen {
         this.passwords = passwords
     }
 
+/*
 
-    /* State managment functions */
+    ███████╗████████╗ █████╗ ████████╗███████╗    ███╗   ███╗ █████╗ ███╗   ██╗ █████╗  ██████╗ ███╗   ███╗███████╗███╗   ██╗████████╗
+    ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██╔════╝    ████╗ ████║██╔══██╗████╗  ██║██╔══██╗██╔════╝ ████╗ ████║██╔════╝████╗  ██║╚══██╔══╝
+    ███████╗   ██║   ███████║   ██║   █████╗      ██╔████╔██║███████║██╔██╗ ██║███████║██║  ███╗██╔████╔██║█████╗  ██╔██╗ ██║   ██║
+    ╚════██║   ██║   ██╔══██║   ██║   ██╔══╝      ██║╚██╔╝██║██╔══██║██║╚██╗██║██╔══██║██║   ██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║
+    ███████║   ██║   ██║  ██║   ██║   ███████╗    ██║ ╚═╝ ██║██║  ██║██║ ╚████║██║  ██║╚██████╔╝██║ ╚═╝ ██║███████╗██║ ╚████║   ██║
+    ╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝
 
+*/
     public fun getCurrentPasswordId(): Int {
         return this.currentPasswordID.value
     }
-
-
 
     public fun getNewPassword(): Password {
         val newPassword: Password = Password(
@@ -119,7 +123,15 @@ public class MainScreen {
         println(id)
     }
 
-    /* Composable Functions */
+
+    /*
+         ██████╗ ██████╗ ███╗   ███╗██████╗  ██████╗ ███████╗ █████╗ ██████╗ ██╗     ███████╗
+        ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██╔═══██╗██╔════╝██╔══██╗██╔══██╗██║     ██╔════╝
+        ██║     ██║   ██║██╔████╔██║██████╔╝██║   ██║███████╗███████║██████╔╝██║     █████╗
+        ██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║   ██║╚════██║██╔══██║██╔══██╗██║     ██╔══╝
+        ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ╚██████╔╝███████║██║  ██║██████╔╝███████╗███████╗
+         ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝      ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝
+    */
 
     @Composable
     public fun render() {
@@ -243,7 +255,7 @@ public class MainScreen {
                                         Image(painter = image,contentDescription = "", modifier = Modifier.scale(0.5.toFloat()).alpha(0.5.toFloat()))
                                     }
                                     else if (screenSelector.value == 2){
-                                        PasswordDetailsElement().render(parentMaxWidth, parentMaxHeight, passwords[currentPasswordID.value - 1])
+                                        PasswordDetailsElement().render(parentMaxWidth, parentMaxHeight, mainScreenHeight, passwords[currentPasswordID.value - 1])
                                     }
                                     else if (screenSelector.value == 3){
                                         newPasswordElement(parentMaxWidth, parentMaxHeight, mainScreenHeight)
@@ -280,7 +292,7 @@ public class MainScreen {
 
                     if (screenSelector.value == 3){
                         Button(
-                            modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.10).dp),
+                            modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.15).dp),
                             shape = RoundedCornerShape(0.dp),
                             elevation = ButtonDefaults.elevation(0.dp),
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
@@ -308,7 +320,7 @@ public class MainScreen {
                     }
                     if (screenSelector.value == 1){
                         Button(
-                            modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.10).dp),
+                            modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.15).dp),
                             shape = RoundedCornerShape(0.dp),
                             elevation = ButtonDefaults.elevation(0.dp),
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
@@ -323,7 +335,7 @@ public class MainScreen {
                     }
                     if (screenSelector.value == 2){
                         Button(
-                            modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.10).dp),
+                            modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.15).dp),
                             shape = RoundedCornerShape(0.dp),
                             elevation = ButtonDefaults.elevation(0.dp),
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
@@ -363,23 +375,24 @@ public class MainScreen {
             verticalArrangement = Arrangement.Bottom
         ) {
             Button(
-                modifier = Modifier.width((width * 0.70).dp).height((height * 0.04).dp).wrapContentWidth(Alignment.CenterHorizontally),
+                modifier = Modifier.width((width * 0.40).dp).height((height * 0.04).dp),
                 shape = RoundedCornerShape(0.dp),
-                colors =  ButtonDefaults.buttonColors(backgroundColor = SideMenuGreen),
+                colors =  ButtonDefaults.buttonColors(backgroundColor = Color.Red),
                 elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp),
                 onClick = { /* openAboutPopUp.value = true */}
             ){
-                Row() {
-                    Icon(
-                        modifier = Modifier.size((height * 0.06).dp),
-                        imageVector = FontAwesomeIcons.Regular.QuestionCircle,
-                        contentDescription = "about",
-                        tint = Color.White
-                    )
+                Row {
+//                    Icon(
+//                        modifier = Modifier.size((height * 0.02).dp),
+//                        imageVector = FontAwesomeIcons.Regular.QuestionCircle,
+//                        contentDescription = "about",
+//                        tint = Color.White
+//                    )
                     Text(
                         text = "About",
-                        modifier = Modifier.align(Alignment.CenterVertically).padding(end = (width * 0.07).dp),
-                        fontSize = 18.sp,
+                        modifier = Modifier.align(Alignment.CenterVertically),
+//                        fontSize = 18.sp,
+                        fontSize = textSizeCalc(height, 18.toDouble()),
                         color = Color.White
                     )
                 }
@@ -513,8 +526,8 @@ public class MainScreen {
                 )
                 Spacer(modifier = Modifier.height((parentMaxHeight * 0.075).dp))
 
-                println(mainScreenHeight)
-                println(textSizeCalc(mainScreenHeight, 50.toDouble()))
+//                println(mainScreenHeight)
+//                println(textSizeCalc(mainScreenHeight, 50.toDouble()))
 
                 TextField(
                     modifier = Modifier.width(textFieldWidth.dp).height((textFieldHeight * 1.5).dp),
@@ -527,7 +540,6 @@ public class MainScreen {
                             Text(
                                 text = "Name",
                                 modifier = Modifier.padding(start = (textFieldWidth * 0.38).dp),
-//                                fontSize = 50.sp,
                                 fontSize = textSizeCalc(mainScreenHeight, 50.toDouble()),
                                 textAlign = TextAlign.Center
                             )
@@ -601,6 +613,7 @@ public class MainScreen {
                     isError = emptyUsername.value,
                 )
 
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Row(){
 
@@ -629,8 +642,8 @@ public class MainScreen {
 
                         TextField(
                             modifier = Modifier.width(passwordElementWidth.dp)
-                                .height(textFieldHeight.dp)
-                                .wrapContentHeight(Alignment.Top),
+                                .height(textFieldHeight.dp),
+//                                .wrapContentHeight(Alignment.Top),
                             value = password.value,
                             visualTransformation = if(passwordVisibility.value == false) PasswordVisualTransformation('*') else VisualTransformation.None,
                             onValueChange = { newPassword -> password.value = newPassword },
@@ -728,6 +741,7 @@ class PasswordDetailsElement {
     public fun render(
         parentMaxWidth: Double,
         parentMaxHeight: Double,
+        mainScreenHeight: Double,
         password: Password
     ) {
 
@@ -767,7 +781,7 @@ class PasswordDetailsElement {
                     singleLine = true,
                     textStyle = TextStyle(
                         color = Color.Black,
-                        fontSize = 50.sp,
+                        fontSize = textSizeCalc(mainScreenHeight, 50.toDouble()),
                         textAlign = TextAlign.Center
                     ),
                     colors = TextFieldDefaults.textFieldColors(
@@ -795,7 +809,7 @@ class PasswordDetailsElement {
                             .wrapContentHeight(Alignment.Bottom),
                         text = "Username",
                         style = TextStyle(
-                            fontSize = 17.sp,
+                            fontSize = textSizeCalc(mainScreenHeight, 17.toDouble())
                         ),
                     )
                 }
@@ -809,7 +823,7 @@ class PasswordDetailsElement {
                     singleLine = true,
                     textStyle = TextStyle(
                         color = Color.Black,
-                        fontSize = 25.sp
+                        fontSize = textSizeCalc(mainScreenHeight, 25.toDouble())
                     ),
                     colors = TextFieldDefaults.textFieldColors(
                         focusedIndicatorColor = Color.Transparent,
@@ -820,6 +834,7 @@ class PasswordDetailsElement {
                     )
                 )
 
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Row(){
 
@@ -841,7 +856,7 @@ class PasswordDetailsElement {
                                     .wrapContentHeight(Alignment.Bottom),
                                 text = "Password",
                                 style = TextStyle(
-                                    fontSize = 17.sp,
+                                    fontSize = textSizeCalc(mainScreenHeight, 17.toDouble())
                                 ),
                             )
                         }
@@ -858,7 +873,7 @@ class PasswordDetailsElement {
                             singleLine = true,
                             textStyle = TextStyle(
                                 color = Color.Black,
-                                fontSize = 25.sp
+                                fontSize = textSizeCalc(mainScreenHeight, 25.toDouble())
                             ),
                             colors = TextFieldDefaults.textFieldColors(
                                 focusedIndicatorColor = Color.Transparent,
@@ -904,7 +919,7 @@ class PasswordDetailsElement {
                     singleLine = true,
                     textStyle = TextStyle(
                         color = Color.Black,
-                        fontSize = 20.sp
+                        fontSize = textSizeCalc(mainScreenHeight, 20.toDouble())
                     ),
                     colors = TextFieldDefaults.textFieldColors(
                         focusedIndicatorColor = Color.Transparent,
@@ -918,7 +933,7 @@ class PasswordDetailsElement {
                             text = "Description",
                             style = TextStyle(
                                 color = azuldoido,
-                                fontSize = 16.sp,
+                                fontSize = textSizeCalc(mainScreenHeight, 16.toDouble())
                             ),
                         )
                     }

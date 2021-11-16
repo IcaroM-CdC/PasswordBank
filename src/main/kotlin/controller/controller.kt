@@ -74,5 +74,15 @@ class MainController {
 
             mainScreen.setCreateNewPasswordClickState(false)
         }
+
+        if (mainScreen.getDeletePasswordClickState() == true){
+
+            val ID: Int = mainScreen.getCurrentPasswordId()
+            println(ID)
+
+            queries.deletePassword(ID, connection)
+
+            mainScreen.setDeletePassWordClickState(false)
+        }
     }
 }

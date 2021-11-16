@@ -44,6 +44,7 @@ import misc.textSizeCalc
 public class MainScreen {
 
     private lateinit var createNewPasswordClick: MutableState<Boolean>
+    private lateinit var deleteCurrentPassword: MutableState<Boolean>
 
 
     private lateinit var name: MutableState<String>
@@ -55,7 +56,8 @@ public class MainScreen {
     private val screenSelector: MutableState<Int> = mutableStateOf(1)
 
     private var passwords: MutableList<Password> = mutableListOf()
-    private val currentPasswordID: MutableState<Int> = mutableStateOf(0)
+//    private val currentPasswordID: MutableState<Int> = mutableStateOf(0)
+    private lateinit var currentPasswordID: MutableState<Int>
     private val controlFlag: MutableState<Boolean> = mutableStateOf(false)
     private val showTopBarActionButton: MutableState<Boolean> = mutableStateOf(false)
 
@@ -65,6 +67,12 @@ public class MainScreen {
 
 
     /* State managment functions */
+
+    public fun getCurrentPasswordId(): Int {
+        return this.currentPasswordID.value
+    }
+
+
 
     public fun getNewPassword(): Password {
         val newPassword: Password = Password(
@@ -95,10 +103,20 @@ public class MainScreen {
         }
     }
 
+    public fun getDeletePasswordClickState(): Boolean {
+        return this.deleteCurrentPassword.value
+    }
+
+    public fun setDeletePassWordClickState(value: Boolean) {
+        this.deleteCurrentPassword.value = value
+    }
+
     private fun handleSelectPasswordOnList(id: Int) {
         this.controlFlag.value = true
         this.currentPasswordID.value = id
         this.screenSelector.value = 2
+
+        println(id)
     }
 
     /* Composable Functions */
@@ -112,6 +130,9 @@ public class MainScreen {
         description = remember { mutableStateOf("") }
 
         createNewPasswordClick = remember { mutableStateOf(false) }
+        deleteCurrentPassword = remember { mutableStateOf(false) }
+
+        currentPasswordID = remember { mutableStateOf(0) }
 
         BoxWithConstraints {
 
@@ -256,25 +277,78 @@ public class MainScreen {
 
             TopAppBar(backgroundColor = Color.White, modifier = Modifier.height(58.dp)) {
                 Row {
-                    Button(
-                        onClick = {setCreateNewPasswordClickState(true); this@MainScreen.screenSelector.value = 1},
-                        enabled = true,
-                        content = {
-                            Text(text = "Create")
-                        }
-                    )
-                    Button(
-                        modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.10).dp),
-                        shape = RoundedCornerShape(0.dp),
-                        elevation = ButtonDefaults.elevation(0.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                        onClick = {this@MainScreen.screenSelector.value = 3},
-                        content = {
-                            Text(
-                                    text = "New Password"
-                            )
-                        }
-                    )
+
+                    if (screenSelector.value == 3){
+                        Button(
+                            modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.10).dp),
+                            shape = RoundedCornerShape(0.dp),
+                            elevation = ButtonDefaults.elevation(0.dp),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                            onClick = {this@MainScreen.screenSelector.value = 3},
+                            content = {
+                                Text(
+                                    text = "New Password",
+                                    fontSize = 15.sp
+                                )
+                            },
+                        )
+                        Button(
+                            modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.10).dp),
+                            shape = RoundedCornerShape(0.dp),
+                            elevation = ButtonDefaults.elevation(0.dp),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                            onClick = {setCreateNewPasswordClickState(true); this@MainScreen.screenSelector.value = 1},
+                            content = {
+                                Text(
+                                    text = "Create",
+                                    fontSize = 15.sp
+                                )
+                            }
+                        )
+                    }
+                    if (screenSelector.value == 1){
+                        Button(
+                            modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.10).dp),
+                            shape = RoundedCornerShape(0.dp),
+                            elevation = ButtonDefaults.elevation(0.dp),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                            onClick = {this@MainScreen.screenSelector.value = 3},
+                            content = {
+                                Text(
+                                    text = "New Password",
+                                    fontSize = 15.sp
+                                )
+                            },
+                        )
+                    }
+                    if (screenSelector.value == 2){
+                        Button(
+                            modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.10).dp),
+                            shape = RoundedCornerShape(0.dp),
+                            elevation = ButtonDefaults.elevation(0.dp),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                            onClick = {this@MainScreen.screenSelector.value = 3},
+                            content = {
+                                Text(
+                                    text = "New Password",
+                                    fontSize = 15.sp
+                                )
+                            },
+                        )
+                        Button(
+                            modifier = Modifier.height(topBarHeight.dp).width((topBarWidth * 0.10).dp),
+                            shape = RoundedCornerShape(0.dp),
+                            elevation = ButtonDefaults.elevation(0.dp),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                            onClick = { setDeletePassWordClickState(true) ; this@MainScreen.screenSelector.value = 1},
+                            content = {
+                                Text(
+                                    text = "Delete",
+                                    fontSize = 15.sp
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }

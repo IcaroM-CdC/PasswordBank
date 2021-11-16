@@ -112,7 +112,6 @@ class Queries {
             return true
 
         } catch (error: SQLException){
-            println("deu ruim")
             return false
         }
     }
@@ -170,11 +169,14 @@ class Queries {
             """.trimIndent()
 
             val deletePasswordQuery = connection.prepareStatement(deletePasswordSQL)
+            println(passwordID)
             deletePasswordQuery.setInt(1, passwordID)
-            deletePasswordQuery.executeQuery()
+            deletePasswordQuery.executeUpdate()
+
+            println("foi")
 
         } catch (error: SQLException) {
-
+            println(error)
         }
     }
 }

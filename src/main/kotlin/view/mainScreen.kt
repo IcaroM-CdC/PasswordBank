@@ -56,7 +56,26 @@ public class MainScreen {
     private val screenSelector: MutableState<Int> = mutableStateOf(1)
 
     private var passwords: MutableList<Password> = mutableListOf()
+
+    /*
+    *
+    * é necesario a dinstinção entre arrayId e ID, pois o banco de dados inicia a indexação a partir do numer 1
+    * enquanto o array de senhas inicia do 0.
+    *
+    * no caso de apos a deleção de uma senha pode ocorrer de ao tentar renderizar a senha
+    * acessado os dados do array de senhas iria tentar encontrar os dados utilizando o ID do banco de dados
+    * o que geraria um erro pois o array possui um tamanho menor
+    *
+    * o problema se agrava quando ocorre a deleção de senhas anteriores i.e com um indice no banco de dados menor.
+    * Ao tentar acessar as senhas com indices maiores irá existir uma discrepancia entre o campo id e a posição
+    * que essa senha ocupa no array
+    *
+    *
+    */
+
     private lateinit var currentPasswordID: MutableState<Int>
+    private lateinit var currentPasswordArrayId: MutableState<Int>
+
     private val controlFlag: MutableState<Boolean> = mutableStateOf(false)
     private val showTopBarActionButton: MutableState<Boolean> = mutableStateOf(false)
 
@@ -115,12 +134,14 @@ public class MainScreen {
         this.deleteCurrentPassword.value = value
     }
 
-    private fun handleSelectPasswordOnList(id: Int) {
+    private fun handleSelectPasswordOnList(id: Int, arrayId: Int) {
         this.controlFlag.value = true
         this.currentPasswordID.value = id
+        this.currentPasswordArrayId.value = arrayId
         this.screenSelector.value = 2
 
         println(id)
+        println(arrayId)
     }
 
 
@@ -145,6 +166,7 @@ public class MainScreen {
         deleteCurrentPassword = remember { mutableStateOf(false) }
 
         currentPasswordID = remember { mutableStateOf(0) }
+        currentPasswordArrayId = remember { mutableStateOf(0) }
 
         BoxWithConstraints {
 
@@ -218,6 +240,7 @@ public class MainScreen {
                                                 dinamicWidth = dinamicWidth,
                                                 dinamicHeight = dinamicHeight,
                                                 id = it.getID(),
+                                                arrayId = it.getArrayId(),
                                                 name = it.getName(),
                                                 description = it.getDescription()
                                             )
@@ -270,7 +293,7 @@ public class MainScreen {
                                             * itera a partir do 0) porem so existira no vetor a senha no indice 0, gerando assim um erro
                                             * */
 
-                                            passwords[currentPasswordID.value - 1]
+                                            passwords[currentPasswordArrayId.value]
                                         )
                                     }
                                     else if (screenSelector.value == 3){
@@ -424,6 +447,7 @@ public class MainScreen {
         dinamicWidth: Double,
         dinamicHeight: Double,
         id: Int,
+        arrayId: Int,
         name: String,
         description: String
     ) {
@@ -449,7 +473,7 @@ public class MainScreen {
                             cardColor = SecondaryBlue
                             cardHighlight = true
 
-                            handleSelectPasswordOnList(id)
+                            handleSelectPasswordOnList(id, arrayId)
                         }
                         else {
                             cardColor = BackgroundGray

@@ -142,6 +142,8 @@ class Queries {
                 all fetched passwords.
             */
 
+            var arrayId: Int = 0
+
             while (result.next()){
                 var id = result.getInt("id")
                 var password = result.getString("password")
@@ -149,9 +151,11 @@ class Queries {
                 var username = result.getString("username")
                 var name = result.getString("name")
 
-                var newPassword: Password = Password(id, password, description, username, name)
+                var newPassword: Password = Password(id, arrayId, password, description, username, name)
 
                 data.add(newPassword)
+
+                arrayId = arrayId + 1
             }
             return data
 

@@ -3,14 +3,16 @@ package model
 class Password {
 
     private val id: Int
+    private val arrayId: Int
     private val username: String
     private val name: String
     private val password: String
     private val description: String
 
-    constructor(id: Int = 0, password: String, description: String, username: String, name: String){
+    constructor(id: Int = 0, arrayId: Int = 0, password: String, description: String, username: String, name: String){
 
         this.id = id
+        this.arrayId = arrayId
         this.username = username
         this.name = name
         this.password = password
@@ -19,6 +21,9 @@ class Password {
 
     public fun getID(): Int {
         return this.id
+    }
+    public fun getArrayId(): Int {
+        return this.arrayId
     }
     public fun getName(): String {
         return this.name

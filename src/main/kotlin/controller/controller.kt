@@ -63,6 +63,9 @@ class MainController {
         var user = User("icaro", "123")
         var data = queries.listPasswords(user, connection)
 
+//        println(data[0].getArrayId())
+//        println(data[0].getID())
+
         val mainScreen = MainScreen(data)
         mainScreen.render()
 

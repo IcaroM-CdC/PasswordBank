@@ -255,7 +255,23 @@ public class MainScreen {
                                         Image(painter = image,contentDescription = "", modifier = Modifier.scale(0.5.toFloat()).alpha(0.5.toFloat()))
                                     }
                                     else if (screenSelector.value == 2){
-                                        PasswordDetailsElement().render(parentMaxWidth, parentMaxHeight, mainScreenHeight, passwords[currentPasswordID.value - 1])
+                                        PasswordDetailsElement().render(
+                                            parentMaxWidth,
+                                            parentMaxHeight,
+                                            mainScreenHeight,
+
+
+                                            /*
+                                            * problema ta aqui
+                                            * nem sempre o mesmo id do bando de dados coincide com a posição no vetor de senhas
+                                            * pois quando deleto no banco de dados o id continua o mesmo porem no vetor não bate
+                                            * ex: possui duas senhas no banco de dados, senhas 1 e 2. Ao deletar a senha 1, quando
+                                            * chamar a função abaixo irá tentar acessar a senha de indice 1 (senha 2, já que o vetor
+                                            * itera a partir do 0) porem so existira no vetor a senha no indice 0, gerando assim um erro
+                                            * */
+
+                                            passwords[currentPasswordID.value - 1]
+                                        )
                                     }
                                     else if (screenSelector.value == 3){
                                         newPasswordElement(parentMaxWidth, parentMaxHeight, mainScreenHeight)

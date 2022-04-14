@@ -21,6 +21,7 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:3.36.0.2") /* Database */
     implementation("com.github.gwenn:sqlite-dialect:0.1.2") /* Database */
     implementation("br.com.devsrsouza.compose.icons.jetbrains:font-awesome:1.0.0") /* Icons */
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.withType<KotlinCompile>() {
@@ -36,4 +37,12 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }
